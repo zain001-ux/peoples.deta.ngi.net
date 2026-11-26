@@ -26,7 +26,7 @@ function render(){let p=remotePeople,v=remoteVolunteers;document.getElementById(
 function csv(rows,filename){if(!rows.length)return toast("No data to export");let keys=[...new Set(rows.flatMap(x=>Object.keys(x)))],s=[keys.join(","),...rows.map(r=>keys.map(k=>'"'+String(r[k]??"").replace(/"/g,'""')+'"').join(","))].join("\r\n"),blob=new Blob(["\ufeff"+s],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url)}document.getElementById("exportPeople").onclick=()=>csv(remotePeople,"ngi-people.csv");document.getElementById("exportVol").onclick=()=>csv(remoteVolunteers,"ngi-volunteers.csv");document.getElementById("clearData").onclick=()=>toast("For safety, records are deleted only through the server admin delete API.");render();
 
 const API_URL_KEY="ngiApiUrl";
-function apiUrl(){return localStorage.getItem(API_URL_KEY)||"";}
+function apiUrl(){return localStorage.getItem(API_URL_KEY)||"https://script.google.com/macros/s/AKfycbyWMibE_W4WiEerUkMcIL6OR0I_uEeu3urWzt1MBUUf-1WIw-u6Y4ilzKrFN6meJrvOjA/exec";}
 async function apiCall(action,data={},adminKey=""){
  const url=apiUrl();if(!url)throw new Error("First click API Setup and paste your Apps Script Web App URL.");
  const payload={action,data,adminKey,password:action==="adminLogin"?data.password:undefined};
