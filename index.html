@@ -15,6 +15,7 @@
 </main></div><div class="toast" id="toast"></div>
 <script>
 const API_URL_KEY="ngiApiUrl";
+let remotePeople=[],remoteVolunteers=[],adminToken="";
 const DEMO_USER="ngiadmin",DEMO_PASS="ngi2026-preview",get=k=>{try{return JSON.parse(localStorage.getItem(k)||"[]")}catch{return []}},set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 function toast(m){let t=document.getElementById("toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",2200)}
 function showTab(id){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));render()}document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>showTab(b.dataset.go));
@@ -34,7 +35,7 @@ async function apiCall(action,data={},adminKey=""){
  const response=await fetch(url,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
  return response.json();
 }
-let remotePeople=[],remoteVolunteers=[],adminToken="";
+
 async function refreshRemote(){const result=await apiCall("getRecords",{},adminToken);if(!result.success)throw new Error(result.message||"Records could not be loaded");remotePeople=result.people||[];remoteVolunteers=result.volunteers||[];render();}
 function apiSetup(){const current=apiUrl();const entered=prompt("Paste deployed Google Apps Script Web App URL:",current);if(entered===null)return;if(!entered.trim()){localStorage.removeItem(API_URL_KEY);toast("API URL removed");return;}localStorage.setItem(API_URL_KEY,entered.trim());toast("API URL saved on this browser");}
 document.getElementById("apiSetupBtn").onclick=apiSetup;
